@@ -22,10 +22,11 @@ $mentions = array();
 
 foreach($result->statuses as $s) {
 	foreach($s->entities->urls as $url) {
-		//if ((stristr($url->expanded_url, 'soundcloud.com') !== FALSE) || (stristr($url->expanded_url, 'snd.sc') !== FALSE)) {
+		$urlLocation = get_location_header($url->expanded_url);
+		if ((stristr($urlLocation, 'soundcloud.com') !== FALSE) || (stristr($urlLocation, 'snd.sc') !== FALSE)) {
 			$value = $url->expanded_url;
 			array_push($url_depo, $value);
-		//}
+		}
 	}
 }
 
@@ -43,10 +44,48 @@ foreach($result as $twitter_post)
 	foreach($twitter_post->entities->user_mentions as $shout_out)
 	{
 		$value = $shout_out->screen_name;
-		array_push($mentions, $value);
+		if (!in_array($value, $mentions)) {
+			array_push($mentions, $value);
+		}
 	}
 }
 
+$return = new ArrayObject();
+$return['urls'] = $url_depo;
+$return['mentions'] = $mentions;
+
+echo json_encode($return);
+
 //$connection->post('statuses/update', array('status' => $message));
+
+
+
+// this will return the long url from (most) url shorteners
+function get_location_header($url) {
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+	curl_setopt($ch, CURLOPT_USERAGENT, 'MHD 2013');
+	curl_setopt($ch, CURLOPT_REFERER, 'http://tbd.com');
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_HEADER, true);
+	curl_setopt($ch, CURLOPT_NOBODY, true);
+	$response = curl_exec($ch);
+	curl_close($ch);
+	
+	if ($response) {
+	   preg_match_all('#Location:\s?([^\s]+)#i', $response, $match);
+	    
+	    if (isset($match[1])) {
+	        return end($match[1]);
+	       }
+	}
+	
+	return false;
+}
 
 ?>

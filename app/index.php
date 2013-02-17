@@ -42,16 +42,12 @@ $('#twitterform').submit(function(e) {
 	var url = "what.php?q=" + $('#twittername').val();
 	$.getJSON(url, function(data) {
 		console.log(data);
-		var track_url = data;
+		var track_url = data['urls'][0];
 		SC.oEmbed(track_url, { auto_play: true }, function(oEmbed) {
 			$('#scCont').html(oEmbed['html']);
 			console.log(oEmbed);
 		});
 
-		var url = "e.php?q=" + track_url;
-			$.getJSON(url, function(data) {
-				console.log(data)
-			});
 	});
 });
 </script>
