@@ -22,10 +22,6 @@
 	</div>
 </div>
 
-<footer>
-	<i class="icon-play icon-2x"></i>
-</footer>
-
 <script src="http://code.jquery.com/jquery.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="http://connect.soundcloud.com/sdk.js"></script>
@@ -47,6 +43,16 @@ $('#twitterform').submit(function(e) {
 			$('#scCont').html(oEmbed['html']);
 			console.log(oEmbed);
 		});
+
+		var i =0;
+		var next_track = '';
+
+		/*while (next_track == '') {
+			var url = "what.php?q=" + data['mentions'][i];
+			i++;
+			$.getJSON(url, function(data) {
+			});
+		}*/
 
 	});
 });
