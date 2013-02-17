@@ -17,23 +17,11 @@ $url_depo = array();
 $mentions = array();
 $get_query = $_GET['q'];
 
-<<<<<<< HEAD
-foreach($result->statuses as $s) {
-	foreach($s->entities->urls as $url) {
-		$urlLocation = get_location_header($url->expanded_url);
-		if ((stristr($urlLocation, 'soundcloud.com') !== FALSE) || (stristr($urlLocation, 'snd.sc') !== FALSE)) {
-			$value = $url->expanded_url;
-			array_push($url_depo, $value);
-		}
-	}
-}
-=======
 //Captures the latest Tweet based on the conditions
 function search_tweets ($search_tweets, $get_query, $connection)
 {
 	//Define Variables
 	$array = array();
->>>>>>> Clean Functions
 
 	//Capture URL
 	$p['q'] = 'soundcloud from:' . $get_query . ' filter:links';
@@ -69,12 +57,6 @@ function read_timeline($read_timeline, $get_query, $connection)
 
 	foreach($result as $twitter_post)
 	{
-<<<<<<< HEAD
-		$value = $shout_out->screen_name;
-		if (!in_array($value, $mentions)) {
-			array_push($mentions, $value);
-		}
-=======
 		foreach($twitter_post->entities->user_mentions as $shout_out)
 		{
 			$value = $shout_out->screen_name;
@@ -114,21 +96,11 @@ function get_location_header($url) {
 	    if (isset($match[1])) {
 	        return end($match[1]);
 	       }
->>>>>>> Clean Functions
 	}
 	
 	return false;
 }
 
-<<<<<<< HEAD
-$return = new ArrayObject();
-$return['urls'] = $url_depo;
-$return['mentions'] = $mentions;
-
-echo json_encode($return);
-
-//$connection->post('statuses/update', array('status' => $message));
-=======
 //Capture the data from the functions
 $url_depo = search_tweets($search_tweets, $get_query, $connection);
 $mention  = read_timeline($read_timeline, $get_query, $connection);
@@ -138,36 +110,5 @@ $return['urls'] = $url_depo;
 $return['mentions'] = $mention;
 
 echo json_encode($return);
->>>>>>> Clean Functions
-
-
-
-// this will return the long url from (most) url shorteners
-function get_location_header($url) {
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-	curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-	curl_setopt($ch, CURLOPT_USERAGENT, 'MHD 2013');
-	curl_setopt($ch, CURLOPT_REFERER, 'http://tbd.com');
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-	curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_HEADER, true);
-	curl_setopt($ch, CURLOPT_NOBODY, true);
-	$response = curl_exec($ch);
-	curl_close($ch);
-	
-	if ($response) {
-	   preg_match_all('#Location:\s?([^\s]+)#i', $response, $match);
-	    
-	    if (isset($match[1])) {
-	        return end($match[1]);
-	       }
-	}
-	
-	return false;
-}
 
 ?>
