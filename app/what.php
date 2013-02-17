@@ -13,9 +13,12 @@ $search_users  = 'https://api.twitter.com/1.1/users/search.json';
 $read_timeline = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
 
 //Define Variables
-$url_depo = array();
-$mentions = array();
+$url_depo  = array();
+$mentions  = array();
+$next_song = array();
+$the_talks = array();
 $get_query = $_GET['q'];
+
 
 //Captures the latest Tweet based on the conditions
 function search_tweets ($search_tweets, $get_query, $connection)
@@ -23,7 +26,7 @@ function search_tweets ($search_tweets, $get_query, $connection)
 	//Define Variables
 	$array = array();
 
-	//Capture URL
+	//Capture Data
 	$p['q'] = 'soundcloud from:' . $get_query . ' filter:links';
 	$p['count'] = 5;
 	$result = $connection->get($search_tweets, $p);
@@ -32,14 +35,20 @@ function search_tweets ($search_tweets, $get_query, $connection)
 	{
 		foreach($s->entities->urls as $url) 
 		{
-			$urlLocation = get_location_header($url->expanded_url);
+			//$urlLocation = get_location_header($url->expanded_url);
+			$urlHeaders = get_headers($url->expanded_url,1);
+			$urlLocation = $urlHeaders['Location'];
 			if ((stristr($urlLocation, 'soundcloud.com') !== FALSE) || (stristr($urlLocation, 'snd.sc') !== FALSE)) 
 			{
 				$value = $url->expanded_url;
 				array_push($array, $value);
 			} // End of IF
+
 		} //End of Foreach
+
 	} // End of Foreach
+
+	shuffle($array);
 
 	return $array;
 
@@ -73,8 +82,65 @@ function read_timeline($read_timeline, $get_query, $connection)
 
 }//End of function
 
+//Return the next result based on the user's initial input
+function next_song($array, $search_tweets, $connection)
+{
+	//Randomize Results
+	shuffle($array);
+
+	//So far as long as the Array is not empty
+	while(!empty($array))
+	{
+		//Passes the information of the person mentioned as the query item
+		$get_query = array_pop($array);
+
+		//Get the results from TWitter
+		$result = search_tweets ($search_tweets, $get_query, $connection);
+		
+		//If we found a link, return it and break the while cycle
+		if(!empty($result))
+		{
+			$value['urls'] = $result;
+			$value['artist'] = $get_query;
+			return $value;
+			break;
+		}
+
+	}
+}
+
+//Who's talking about the link that is currently being played
+//function talked_by($link, $search_tweets, $connection)
+//{
+	
+	$link  = 'http://fb.me/1YlMtubqH';
+	//Define Variable
+	$capture = array();
+	$return  = array();
+
+	//Capture Data
+	stripslashes($link);
+	$p['q'] = $link . ' filter:links';
+	$p['count'] = 5;
+	echo "hell!";
+	$result = $connection->get($search_tweets, $p);
+
+	foreach($result->statuses as $people)
+	{
+		$capture['screen_name']		  = $people->user->screen_name;
+		$capture['profile_image_url'] = $people->user->profile_image_url;
+		$capture['text'] 			  = $people->text;
+		array_push($return, $capture);
+		unset($capture);
+	}
+
+//	return $return;
+//}
+
 // this will return the long url from (most) url shorteners
-function get_location_header($url) {
+//Not needed, using get_headers()
+function get_location_header($url) 
+{
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
@@ -101,14 +167,26 @@ function get_location_header($url) {
 	return false;
 }
 
+/*
 //Capture the data from the functions
-$url_depo = search_tweets($search_tweets, $get_query, $connection);
-$mention  = read_timeline($read_timeline, $get_query, $connection);
+$url_depo  = search_tweets($search_tweets, $get_query, $connection);
+$mention   = read_timeline($read_timeline, $get_query, $connection);
+$next_song = next_song($mention, $search_tweets, $connection);
+*/
+
+//$vid_link  = $url_depo[0];
+$vid_link  = 'http://fb.me/1YlMtubqH';
+//$the_talks = talked_by($vid_link, $search_tweets, $connection);
 
 $return = new ArrayObject();
-$return['urls'] = $url_depo;
-$return['mentions'] = $mention;
+//$return['urls'] 	 = $url_depo;
+//$return['mentions']  = $mention;
+//$return['next_song'] = $next_song;
+$return['audience'] = $the_talks;
 
-echo json_encode($return);
-
+echo "<pre>";
+//echo json_encode($return);
+print_r($return);
+echo "</pre>";
+*/
 ?>
