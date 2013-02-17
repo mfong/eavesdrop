@@ -6,7 +6,7 @@ $consumer_secret = "30h0qGW6RhUpjTDayKeCSTjAmOJgLqfk6DR9hv6Bes";
 $access_key = "15512007-IBBbYoNX3wu8DTeSqS1IxYgQXEvZv27bsejNsohpE";
 $access_secret = "rwPBADZWflr9zJNQWB1L4F6ANOFX1OaQBI4FIxlX6qY";
   
-$connection = new TwitterOAuth ($consumer_key ,$consumer_secret , $access_key , $access_secret );
+$connection = new TwitterOAuth ($consumer_key ,$consumer_secret , $access_key , $access_secret);
 
 $search_tweets = 'https://api.twitter.com/1.1/search/tweets.json';
 $search_users  = 'https://api.twitter.com/1.1/users/search.json';
@@ -35,7 +35,7 @@ function search_tweets ($search_tweets, $get_query, $connection)
 	{
 		foreach($s->entities->urls as $url) 
 		{
-			//$urlLocation = get_location_header($url->expanded_url);
+			$urlLocation = get_location_header($url->expanded_url);
 			$urlHeaders = get_headers($url->expanded_url,1);
 			$urlLocation = $urlHeaders['Location'];
 			if ((stristr($urlLocation, 'soundcloud.com') !== FALSE) || (stristr($urlLocation, 'snd.sc') !== FALSE)) 
@@ -110,10 +110,8 @@ function next_song($array, $search_tweets, $connection)
 }
 
 //Who's talking about the link that is currently being played
-//function talked_by($link, $search_tweets, $connection)
-//{
-	
-	$link  = 'http://fb.me/1YlMtubqH';
+function talked_by($link, $search_tweets, $connection)
+{
 	//Define Variable
 	$capture = array();
 	$return  = array();
@@ -122,7 +120,7 @@ function next_song($array, $search_tweets, $connection)
 	stripslashes($link);
 	$p['q'] = $link . ' filter:links';
 	$p['count'] = 5;
-	echo "hell!";
+
 	$result = $connection->get($search_tweets, $p);
 
 	foreach($result->statuses as $people)
@@ -134,8 +132,8 @@ function next_song($array, $search_tweets, $connection)
 		unset($capture);
 	}
 
-//	return $return;
-//}
+	return $return;
+}
 
 // this will return the long url from (most) url shorteners
 //Not needed, using get_headers()
@@ -167,26 +165,25 @@ function get_location_header($url)
 	return false;
 }
 
-/*
+
 //Capture the data from the functions
 $url_depo  = search_tweets($search_tweets, $get_query, $connection);
 $mention   = read_timeline($read_timeline, $get_query, $connection);
 $next_song = next_song($mention, $search_tweets, $connection);
-*/
 
-//$vid_link  = $url_depo[0];
-$vid_link  = 'http://fb.me/1YlMtubqH';
-//$the_talks = talked_by($vid_link, $search_tweets, $connection);
+$vid_link  = $url_depo[0];
+$the_talks = talked_by($vid_link, $search_tweets, $connection);
 
-$return = new ArrayObject();
-//$return['urls'] 	 = $url_depo;
-//$return['mentions']  = $mention;
-//$return['next_song'] = $next_song;
-$return['audience'] = $the_talks;
+
+$return 			 = new ArrayObject();
+$return['urls'] 	 = $url_depo;
+$return['mentions']  = $mention;
+$return['next_song'] = $next_song;
+$return['talked_by'] = $the_talks;
 
 echo "<pre>";
 //echo json_encode($return);
 print_r($return);
 echo "</pre>";
-*/
+
 ?>
