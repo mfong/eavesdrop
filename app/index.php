@@ -18,7 +18,9 @@
 				<input type="text" id="twittername"/>
 			</div>
 		</form>
+		
 		<div id="scCont"></div>
+		<div id="tCont"></div>
 	</div>
 </div>
 
@@ -35,24 +37,20 @@ $('#twitterform').submit(function(e) {
 
 	$('#scCont').html('<i class="icon-spinner icon-spin icon-2x"></i> Finding Songs...');
 
-	var url = "what.php?q=" + $('#twittername').val();
+	var url = "what2.php?do=getTrack&q=" + $('#twittername').val();
 	$.getJSON(url, function(data) {
 		console.log(data);
-		var track_url = data['urls'][0];
+		var track_url = data['urls'][0]['track_url'];
 		SC.oEmbed(track_url, { auto_play: true }, function(oEmbed) {
 			$('#scCont').html(oEmbed['html']);
 			console.log(oEmbed);
 		});
 
-		var i =0;
-		var next_track = '';
-
-		/*while (next_track == '') {
-			var url = "what.php?q=" + data['mentions'][i];
-			i++;
-			$.getJSON(url, function(data) {
-			});
-		}*/
+		var url = "what2.php?do=getEmbed&q=" + data['urls'][0]['id'];
+		$.getJSON(url, function(data) {
+			console.log(data);
+			$('#tCont').html(data['html']);
+		});
 
 	});
 });
