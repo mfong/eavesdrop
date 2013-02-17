@@ -33,3 +33,18 @@ footer {
 	background-color: #9cf;
 	opacity: 0.85;
 }
+
+.album_thumb {
+	width: 100px;
+	height: 100px;
+	margin-right: 20px;
+}
+
+#scNext {
+	position: relative;
+}
+
+#scNext small {
+	position: absolute;
+	bottom: 0; left: 120px;
+}

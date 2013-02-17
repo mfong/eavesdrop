@@ -20,40 +20,21 @@
 		</form>
 		
 		<div id="scCont"></div>
+		<div class="controls">
+			<a href="#" class="play">play</a>
+			<a href="#" class="pause">pause</a>
+			<a href="#" class="next">next</a>
+		</div>
+		<div id="scNext" class="clearfix"></div>
 		<div id="tCont"></div>
+		<div id="twCont"></div>
 	</div>
 </div>
 
-<script src="http://code.jquery.com/jquery.js"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="http://connect.soundcloud.com/sdk.js"></script>
-<script>
-SC.initialize({
-  client_id: '7343345bd999dfb70c462490f4dace1a'
-});
-
-$('#twitterform').submit(function(e) {
-	e.preventDefault();
-
-	$('#scCont').html('<i class="icon-spinner icon-spin icon-2x"></i> Finding Songs...');
-
-	var url = "what2.php?do=getTrack&q=" + $('#twittername').val();
-	$.getJSON(url, function(data) {
-		console.log(data);
-		var track_url = data['urls'][0]['track_url'];
-		SC.oEmbed(track_url, { auto_play: true }, function(oEmbed) {
-			$('#scCont').html(oEmbed['html']);
-			console.log(oEmbed);
-		});
-
-		var url = "what2.php?do=getEmbed&q=" + data['urls'][0]['id'];
-		$.getJSON(url, function(data) {
-			console.log(data);
-			$('#tCont').html(data['html']);
-		});
-
-	});
-});
-</script>
+<script src="https://w.soundcloud.com/player/api.js"></script>
+<script src="js/drop.js"></script>
 </body>
 </html>
