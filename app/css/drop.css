@@ -1,0 +1,35 @@
+.econtainer {
+	width: 775px;
+	margin: 0 auto;
+}
+
+#scCont {
+	text-align: center;
+}
+
+.bigassinput {
+}
+
+.bigassinput .add-on,
+.bigassinput input {
+	font-size: 35px !important;
+	line-height: 35px !important;
+	height: 50px !important;
+}
+
+.bigassinput .add-on {
+	width: 50px;
+	line-height: 50px !important;
+}
+
+.bigassinput input {
+	width: 700px;
+}
+
+footer {
+	position: absolute;
+	bottom: 0; left: 0;
+	width: 100%; height: 65px;
+	background-color: #9cf;
+	opacity: 0.85;
+}
