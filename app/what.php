@@ -167,12 +167,12 @@ function get_location_header($url)
 
 
 //Capture the data from the functions
-$url_depo  = search_tweets($search_tweets, $get_query, $connection);
-$mention   = read_timeline($read_timeline, $get_query, $connection);
-$next_song = next_song($mention, $search_tweets, $connection);
+//$url_depo  = search_tweets($search_tweets, $get_query, $connection);
+//$mention   = read_timeline($read_timeline, $get_query, $connection);
+//$next_song = next_song($mention, $search_tweets, $connection);
 
-$vid_link  = $url_depo[0];
-$the_talks = talked_by($vid_link, $search_tweets, $connection);
+//$vid_link  = $url_depo[0];
+//$the_talks = talked_by($vid_link, $search_tweets, $connection);
 
 
 $return 			 = new ArrayObject();
@@ -183,7 +183,14 @@ $return['talked_by'] = $the_talks;
 
 echo "<pre>";
 //echo json_encode($return);
-print_r($return);
+//print_r($return);
+echo "</pre>";
+
+echo "----------><-----------";
+$header_data = get_headers('https://soundcloud.com/emilios1310/sleaze-the-worst-remix-ever',1);
+
+echo "<pre>";
+print_r($header_data);
 echo "</pre>";
 
 ?>
