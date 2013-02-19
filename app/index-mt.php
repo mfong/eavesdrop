@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="css/font-awesome-ie7.min.css">
 <![endif]-->
 <link href="css/drop.css" rel="stylesheet" media="screen">
-<link rel="shortcut icon" href="/img/favicon.ico" />
 </head>
 <body>
 
@@ -31,11 +30,6 @@
 		<div id="tCont"></div>
 		<div id="twCont"></div>
 	</div>
-
-	<footer>
-		<em>Made at <a href="http://sf.musichackday.org/2013/" target="_blank">Music Hack Day 2013 San Francisco</a></em><br/>
-		<em>by <a href="https://twitter.com/matthewfong" target="_blank">@matthewfong</a> and <a href="https://twitter.com/abehjat" target="_blank">@abehjat</a></em>
-	</footer>
 </div>
 
 <script src="http://code.jquery.com/jquery-latest.js"></script>

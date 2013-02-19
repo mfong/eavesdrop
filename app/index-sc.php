@@ -42,7 +42,7 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="http://connect.soundcloud.com/sdk.js"></script>
 <script src="https://w.soundcloud.com/player/api.js"></script>
-<script src="js/mixedtweets.js"></script>
+<script src="js/drop.js"></script>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
